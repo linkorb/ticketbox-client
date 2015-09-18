@@ -1,0 +1,21 @@
+{
+    "name": "linkorb/ticketbox-client",
+    "description": "TicketBox Client for TicketBox Application",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kishan Thobhani",
+            "email": "thobhanikishan@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TicketBox\\Client\\": "src/"
+        }
+    }
+}
