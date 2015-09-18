@@ -1,7 +1,7 @@
 <?php 
 
-namespace TicketBox\Client;
-
+namespace Linkorb\TicketBoxClient;
+ 
 use GuzzleHttp\Client as GuzzleClient;
 
 class Client {
@@ -18,12 +18,7 @@ class Client {
     }
 
     public function get() {
-    	return new GuzzleClient([
-    		'base_url' => [ $this->apiUrl  ],
-		    'defaults' => [
-		        'auth'    => [ $this->username ,  $this->password ],
-		    ]
-		]);
+    	return  new GuzzleClient( ['base_uri' => $this->apiUrl, 'auth' => [$this->username,$this->password] ] );
     }
 
 }
