@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4" : {
-            "Linkorb\\TicketBoxClient\\": "src/"
+            "TicketBox\\Client\\": "src/"
         }
     }
 }

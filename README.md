@@ -10,8 +10,8 @@ composer require linkorb/ticketbox-client
 
 ## Example
 ```php
-use Linkorb\TicketBoxClient\Client as TicketBoxClient;
-use Linkorb\TicketBoxClient\Ticket as TicketBoxTicket;
+use TicketBox\Client\Client as TicketBoxClient;
+use TicketBox\Client\Ticket as TicketBoxTicket;
 
 // get the client
 $client = new TicketBoxClient(
