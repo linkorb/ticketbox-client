@@ -2,6 +2,7 @@
     "name": "linkorb/ticketbox-client",
     "description": "TicketBox Client for TicketBox Application",
     "homepage": "https://github.com/linkorb/ticketbox-client",
+    "keywords": ["ticketbox", "client-library", "php", "api", "linkorb"],
     "type": "library",
     "license": "MIT",
     "authors": [{
