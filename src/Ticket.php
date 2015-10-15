@@ -235,7 +235,6 @@ class Ticket {
     }
 
     public function create( $client ) {
-    	
 	    $response  = $client->request('POST', self::PATH, [
 	    	'body' => $this->toJSONString()
 	    ] );
