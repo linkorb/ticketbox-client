@@ -2,9 +2,9 @@
 
 namespace Linkorb\TicketBoxClient;
 
-class Ticket {
-
-	const PATH = 'tickets/';
+class Ticket
+{
+    const PATH = 'tickets/';
     
     private $id;
 
@@ -174,24 +174,26 @@ class Ticket {
         return $this;
     }
 
-    public function arrayToObject( $array ) {
-    	$this->setId( isset( $array['id'] ) ? $array['id'] : 'null' )
-                ->setSubject( isset( $array['subject'] ) ? $array['subject'] : 'null' )
-                ->setDescription( isset( $array['description'] ) ? $array['description'] : 'null' )
-                ->setState( isset( $array['state'] ) ? $array['state'] : 'null' )
-                ->setUser( isset( $array['user'] ) ? $array['user'] : 'null' )
-                ->setEmail( isset( $array['email'] ) ? $array['email'] : 'null' )
-                ->setOrg( isset( $array['org'] ) ? $array['org'] : 'null' )
-                ->setPhone( isset( $array['phone'] ) ? $array['phone'] : 'null' )
-                ->setQueueId( isset( $array['queue_id'] ) ? $array['queue_id'] : 'null' )
-                ->setCreatedAt( isset( $array['created_at'] ) ? $array['created_at'] : 'null' )
-                ->setUpdatedAt( isset( $array['updated_at'] ) ? $array['updated_at'] : 'null' );
+    public function arrayToObject($array)
+    {
+        $this->setId(isset($array['id']) ? $array['id'] : 'null')
+                ->setSubject(isset($array['subject']) ? $array['subject'] : 'null')
+                ->setDescription(isset($array['description']) ? $array['description'] : 'null')
+                ->setState(isset($array['state']) ? $array['state'] : 'null')
+                ->setUser(isset($array['user']) ? $array['user'] : 'null')
+                ->setEmail(isset($array['email']) ? $array['email'] : 'null')
+                ->setOrg(isset($array['org']) ? $array['org'] : 'null')
+                ->setPhone(isset($array['phone']) ? $array['phone'] : 'null')
+                ->setQueueId(isset($array['queue_id']) ? $array['queue_id'] : 'null')
+                ->setCreatedAt(isset($array['created_at']) ? $array['created_at'] : 'null')
+                ->setUpdatedAt(isset($array['updated_at']) ? $array['updated_at'] : 'null');
     }
 
-    public function getActivity( $client ) {
+    public function getActivity($client)
+    {
         try {
-            $response  = $client->request('GET', self::PATH  . $this->getId() . '/activities' );
-            return json_decode( $response->getBody(), true );
+            $response  = $client->request('GET', self::PATH  . $this->getId() . '/activities');
+            return json_decode($response->getBody(), true);
         } catch (RequestException $e) {
             echo $e->getRequest() . "\n";
             if ($e->hasResponse()) {
@@ -200,10 +202,11 @@ class Ticket {
         }
     }
 
-    public function get( $client ) {
+    public function get($client)
+    {
         try {
-            $response  = $client->request('GET', self::PATH  .$this->getId() );
-            $this->arrayToObject( json_decode( $response->getBody(), true ) );
+            $response  = $client->request('GET', self::PATH  .$this->getId());
+            $this->arrayToObject(json_decode($response->getBody(), true));
         } catch (RequestException $e) {
             echo $e->getRequest() . "\n";
             if ($e->hasResponse()) {
@@ -212,10 +215,10 @@ class Ticket {
         }
     }
 
-    private function toJSONString() {
-
-        if ( null !== $this->getUser()  ) {
-        	$data = [
+    private function toJSONString()
+    {
+        if (null !== $this->getUser()) {
+            $data = [
                 'subject' => $this->getSubject(),
                 'description' => $this->getDescription(),
                 'user' => '',
@@ -231,23 +234,28 @@ class Ticket {
             ];
         }
 
-    	return json_encode($data);
+        return json_encode($data);
     }
 
+<<<<<<< HEAD
     public function create( $client ) {
 	    $response  = $client->request('POST', self::PATH, [
 	    	'body' => $this->toJSONString()
 	    ] );
+=======
+    public function create($client)
+    {
+        $response  = $client->request('POST', self::PATH, [
+            'body' => $this->toJSONString()
+        ]);
+>>>>>>> 4890e64d18d1ad63b05c1a5c933dc29c4bb8bd6f
 
-        $jsonDecode = json_decode( $response->getBody(), true );
+        $jsonDecode = json_decode($response->getBody(), true);
 
-        if ( isset ( $jsonDecode['error'] ) ) {
-            $this->setError ( $jsonDecode['error']['message'] );
+        if (isset($jsonDecode['error'])) {
+            $this->setError($jsonDecode['error']['message']);
         } else {
-	       $this->arrayToObject( $jsonDecode );
-       }
-		
+            $this->arrayToObject($jsonDecode);
+        }
     }
 }
-
-?>

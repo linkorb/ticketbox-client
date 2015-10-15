@@ -1,46 +1,54 @@
-TicketBox Client
-==============
+# TicketBox Client
 
 Create tickets for TicketBox and view activities from your application
 
 ## Installation
+
 ```
 composer require linkorb/ticketbox-client
 ```
 
 ## Example
+
 ```php
-use Linkorb\TicketBoxClient\Client as TicketBoxClient;
-use Linkorb\TicketBoxClient\Ticket as TicketBoxTicket;
+use TicketBox\Client\Client as TicketBoxClient;
+use TicketBox\Client\Ticket as TicketBoxTicket;
 
 // get the client
 $client = new TicketBoxClient(
-    < TicketBox API URL >,
-    < TicketBox Username >,
-    < TicketBox Passwor >'
+    'TicketBox API URL',
+    'TicketBox Username',
+    'TicketBox Password'
 );
 
 // Create Ticket with Logged in user
-$ticket = new Ticket();
-$ticket->setSubject( < TicketBox Ticket Subject > );
-$ticket->setDescription( < TicketBox Ticket Description > );
-$ticket->create( $client->get() ); // pass client 
+$ticket = new TicketBoxTicket();
+$ticket->setSubject('TicketBox Ticket Subject');
+$ticket->setDescription('TicketBox Ticket Description');
+$ticket->create( $client->get() ); // pass client
 
-// Create Anon Ticket 
-$ticket = new Ticket();
-$ticket->setSubject( < TicketBox Ticket Subject > );
-$ticket->setDescription( < TicketBox Ticket Description > );
-$ticket->setUser( < TicketBox Ticket User > );
-$ticket->setEmail( < TicketBox Ticket Email > );
-$ticket->setPhone( < TicketBox Ticket Phone > );
-$ticket->setOrg( < TicketBox Ticket Org > );
-$ticket->create( $client->get() ); // pass client 
+// Create Anon Ticket
+$ticket = new TicketBoxTicket();
+$ticket->setSubject('TicketBox Ticket Subject');
+$ticket->setDescription('TicketBox Ticket Description');
+$ticket->setUser('TicketBox Ticket User');
+$ticket->setEmail('TicketBox Ticket Email');
+$ticket->setPhone('TicketBox Ticket Phone');
+$ticket->setOrg('TicketBox Ticket Org');
+$ticket->create( $client->get() ); // pass client
 
 // Get ticket
-$ticket = new Ticket();
-$ticket->setId( < TicketBox Id > );
-$ticket->get( $client->get() ); // pass client 
+$ticket = new TicketBoxTicket();
+$ticket->setId('TicketBox Id');
+$ticket->get( $client->get() ); // pass client
 
-// Get ticket Activity 
-$ticket->getActivity( $client->get() ); // Activiy in form off array 
+// Get ticket Activity
+$ticket->getActivity( $client->get() ); // Activiy in form off array
 ```
+
+## Brought to you by the LinkORB Engineering team
+
+<img src="http://www.linkorb.com/d/meta/tier1/images/linkorbengineering-logo.png" width="200px" /><br />
+Check out our other projects at [engineering.linkorb.com](http://engineering.linkorb.com).
+
+Btw, we're hiring!
