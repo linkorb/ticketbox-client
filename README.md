@@ -10,40 +10,113 @@ composer require linkorb/ticketbox-client
 
 ## Example
 
+Create Client 
+
 ```php
-use TicketBox\Client\Client as TicketBoxClient;
-use TicketBox\Client\Ticket as TicketBoxTicket;
+require_once __DIR__ . '/../vendor/autoload.php'; 
+
+use Linkorb\TicketBoxClient\Client as Client;
+use Linkorb\TicketBoxClient\Ticket as Ticket;
 
 // get the client
-$client = new TicketBoxClient(
-    'TicketBox API URL',
-    'TicketBox Username',
-    'TicketBox Password'
+$client = new Client(
+    'http://tickets.dev/api/v1/',
+    <username>,
+    <password>
 );
+```
+Create Ticket by logged in User
 
+```php
 // Create Ticket with Logged in user
-$ticket = new TicketBoxTicket();
-$ticket->setSubject('TicketBox Ticket Subject');
-$ticket->setDescription('TicketBox Ticket Description');
-$ticket->create( $client->get() ); // pass client
+$ticket = new Ticket( $client ); // padidng client
+$ticket->setSubject(<ticket subject>);
+$ticket->setDescription(<ticket descripton>);
 
+try {
+	$ticket->create(); 
+} catch( Exception $e ) {
+	echo $e->getMessage();
+} 
+```
+
+Create ticket by Anonymous user
+
+```php
 // Create Anon Ticket
-$ticket = new TicketBoxTicket();
-$ticket->setSubject('TicketBox Ticket Subject');
-$ticket->setDescription('TicketBox Ticket Description');
-$ticket->setUser('TicketBox Ticket User');
-$ticket->setEmail('TicketBox Ticket Email');
-$ticket->setPhone('TicketBox Ticket Phone');
-$ticket->setOrg('TicketBox Ticket Org');
-$ticket->create( $client->get() ); // pass client
+$ticket = new Ticket( $client );
+$ticket->setSubject(<ticket subject>);
+$ticket->setDescription(<ticket descripton>);
+$ticket->setUser(<ticket user full name>);
+$ticket->setEmail(<ticket email>);
+$ticket->setPhone(<ticket phone>);
+$ticket->setOrg(<ticket org>);
 
+try {
+	$ticket->create(); 
+} catch( Exception $e ) {
+	echo $e->getMessage();
+} 
+```
+
+Get Ticket & its activities
+
+```php
+// Create Anon Ticket
+$ticket = new Ticket( $client );
+
+$ticket->get(<ticket id>);
+echo $ticket->getSubject(); // all the field null if not found. 
+
+$activities = $ticket->getActivity(); // get activities
+var_dump($activities);
+```
+
+Change status of ticket 
+
+```php
 // Get ticket
-$ticket = new TicketBoxTicket();
-$ticket->setId('TicketBox Id');
-$ticket->get( $client->get() ); // pass client
+$ticket = new Ticket( $client );
+$ticket->get(5);
 
-// Get ticket Activity
-$ticket->getActivity( $client->get() ); // Activiy in form off array
+try {
+	$ticket->setPending(); 
+	// $ticket->setClose(); 
+	// $ticket->setSchedule(); 
+
+} catch ( Exception $e ) {
+	echo $e->getMessage();
+}
+```
+
+Message ticket
+
+```php
+// Get ticket
+$ticket = new Ticket( $client );
+$ticket->get(<ticket id>);
+
+try {
+	
+	$ticket->message( <ticket message> ); 
+
+} catch ( Exception $e ) {
+	echo $e->getMessage();
+}
+```
+
+Transfer Ticket
+
+```php
+// Get ticket
+$ticket = new Ticket( $client );
+$ticket->get(<ticket id>);
+
+try {
+	$ticket->transfer(<queue id>); 
+} catch ( Exception $e ) {
+	echo $e->getMessage();
+}
 ```
 
 ## Brought to you by the LinkORB Engineering team

@@ -2,10 +2,19 @@
 
 namespace Linkorb\TicketBoxClient;
 
+use Linkorb\TicketBoxClient\Client as Client;
+
 class Ticket
 {
     const PATH = 'tickets/';
     
+    private $client;
+
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
     private $id;
 
     public function getId()
@@ -174,6 +183,144 @@ class Ticket
         return $this;
     }
 
+    
+
+    public function get( $id )
+    {
+
+        try {
+            $response  = $this->client->get()->request('GET', self::PATH.$id );
+            $this->arrayToObject(json_decode($response->getBody(), true));
+        } catch (RequestException $e) {
+            echo $e->getRequest();
+            if ($e->hasResponse()) {
+                echo $e->getResponse();
+            }
+        }
+
+    }
+
+    public function getActivity()
+    {
+        try {
+            $response  = $this->client->get()->request('GET', self::PATH  . $this->getId() . '/activities');
+            return json_decode($response->getBody(), true);
+        } catch (RequestException $e) {
+            echo $e->getRequest() . "\n";
+            if ($e->hasResponse()) {
+                echo $e->getResponse() . "\n";
+            }
+        }
+    }
+
+    private function toJSONString()
+    {
+        if (null !== $this->getUser()) {
+            
+            $data = [
+                'subject' => $this->getSubject(),
+                'description' => $this->getDescription(),
+                'user' => '',
+                'name' => $this->getUser(),
+                'email' => $this->getEmail(),
+                'org' => $this->getOrg(),
+                'phone' => $this->getPhone(),
+            ];
+
+        } else {
+
+            $data = [
+                'subject' => $this->getSubject(),
+                'description' => $this->getDescription(),
+                'user' => $this->client->getUsername()
+            ];
+
+        }
+
+        return json_encode($data);
+    }
+
+    public function create() {
+        
+        $response  = $this->client->get()->request('POST', self::PATH, [
+            'body' => $this->toJSONString()
+        ] );
+
+        // decode json to convert into object and checking for exception.
+        $jsonDecode = json_decode($response->getBody(), true);
+
+        if (isset($jsonDecode['error'])) {
+            throw new \Exception( $jsonDecode['error']['message'] );
+        } else {
+            $this->arrayToObject($jsonDecode);
+        }
+
+    }
+
+    public function setPending() {
+        $response  = $this->client->get()->request('POST', self::PATH  . $this->getId() . '/pending');
+
+        $jsonDecode = json_decode($response->getBody(), true);
+
+        if (isset($jsonDecode['error'])) {
+            throw new \Exception( $jsonDecode['error']['message'] );
+        } 
+    }
+
+    public function setClose() {
+        $response  = $this->client->get()->request('POST', self::PATH  . $this->getId() . '/close');
+
+        $jsonDecode = json_decode($response->getBody(), true);
+
+        if (isset($jsonDecode['error'])) {
+            throw new \Exception( $jsonDecode['error']['message'] );
+        } 
+    }
+
+    public function setSchedule() {
+        $response  = $this->client->get()->request('POST', self::PATH  . $this->getId() . '/schedule');
+
+        $jsonDecode = json_decode($response->getBody(), true);
+
+        if (isset($jsonDecode['error'])) {
+            throw new \Exception( $jsonDecode['error']['message'] );
+        } 
+    }
+
+    public function message( $message ) {
+
+        $body = [
+            'message' => $message
+        ];
+
+        $response  = $this->client->get()->request('POST', self::PATH  . $this->getId() . '/message', [
+            'body' => json_encode($body)
+        ]);
+
+        $jsonDecode = json_decode($response->getBody(), true);
+
+        if (isset($jsonDecode['error'])) {
+            throw new \Exception( $jsonDecode['error']['message'] );
+        } 
+    }
+
+    public function transfer( $queue ) {
+
+        $body = [
+            'queue' => $queue
+        ];
+
+        $response  = $this->client->get()->request('POST', self::PATH  . $this->getId() . '/transfer', [
+            'body' => json_encode($body)
+        ]);
+
+        $jsonDecode = json_decode($response->getBody(), true);
+
+        if (isset($jsonDecode['error'])) {
+            throw new \Exception( $jsonDecode['error']['message'] );
+        } 
+    }
+
     public function arrayToObject($array)
     {
         $this->setId(isset($array['id']) ? $array['id'] : 'null')
@@ -187,75 +334,5 @@ class Ticket
                 ->setQueueId(isset($array['queue_id']) ? $array['queue_id'] : 'null')
                 ->setCreatedAt(isset($array['created_at']) ? $array['created_at'] : 'null')
                 ->setUpdatedAt(isset($array['updated_at']) ? $array['updated_at'] : 'null');
-    }
-
-    public function getActivity($client)
-    {
-        try {
-            $response  = $client->request('GET', self::PATH  . $this->getId() . '/activities');
-            return json_decode($response->getBody(), true);
-        } catch (RequestException $e) {
-            echo $e->getRequest() . "\n";
-            if ($e->hasResponse()) {
-                echo $e->getResponse() . "\n";
-            }
-        }
-    }
-
-    public function get($client)
-    {
-        try {
-            $response  = $client->request('GET', self::PATH  .$this->getId());
-            $this->arrayToObject(json_decode($response->getBody(), true));
-        } catch (RequestException $e) {
-            echo $e->getRequest() . "\n";
-            if ($e->hasResponse()) {
-                echo $e->getResponse() . "\n";
-            }
-        }
-    }
-
-    private function toJSONString()
-    {
-        if (null !== $this->getUser()) {
-            $data = [
-                'subject' => $this->getSubject(),
-                'description' => $this->getDescription(),
-                'user' => '',
-                'name' => $this->getUser(),
-                'email' => $this->getEmail(),
-                'org' => $this->getOrg(),
-                'phone' => $this->getPhone(),
-            ];
-        } else {
-            $data = [
-                'subject' => $this->getSubject(),
-                'description' => $this->getDescription(),
-            ];
-        }
-
-        return json_encode($data);
-    }
-
-<<<<<<< HEAD
-    public function create( $client ) {
-	    $response  = $client->request('POST', self::PATH, [
-	    	'body' => $this->toJSONString()
-	    ] );
-=======
-    public function create($client)
-    {
-        $response  = $client->request('POST', self::PATH, [
-            'body' => $this->toJSONString()
-        ]);
->>>>>>> 4890e64d18d1ad63b05c1a5c933dc29c4bb8bd6f
-
-        $jsonDecode = json_decode($response->getBody(), true);
-
-        if (isset($jsonDecode['error'])) {
-            $this->setError($jsonDecode['error']['message']);
-        } else {
-            $this->arrayToObject($jsonDecode);
-        }
     }
 }
